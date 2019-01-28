@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="JobApplicationDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Tb_Applicants">
+    <Key>
+      <PropertyRef Name="App_Id" />
+    </Key>
+    <Property Name="App_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="App_Postion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="App_First_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="App_Last_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="App_Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="App_Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Tb_Ref" Relationship="Self.FK_Tb_Ref_Tb_Applicants" FromRole="Tb_Applicants" ToRole="Tb_Ref" />
+  </EntityType>
+  <EntityType Name="Tb_Ref">
+    <Key>
+      <PropertyRef Name="RefId" />
+    </Key>
+    <Property Name="RefId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="App_Id" Type="Int32" />
+    <Property Name="Ref_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Ref_Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Tb_Applicants" Relationship="Self.FK_Tb_Ref_Tb_Applicants" FromRole="Tb_Ref" ToRole="Tb_Applicants" />
+  </EntityType>
+  <Association Name="FK_Tb_Ref_Tb_Applicants">
+    <End Role="Tb_Applicants" Type="Self.Tb_Applicants" Multiplicity="0..1" />
+    <End Role="Tb_Ref" Type="Self.Tb_Ref" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tb_Applicants">
+        <PropertyRef Name="App_Id" />
+      </Principal>
+      <Dependent Role="Tb_Ref">
+        <PropertyRef Name="App_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="JobApplicationDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Tb_Applicants" EntityType="Self.Tb_Applicants" />
+    <EntitySet Name="Tb_Ref" EntityType="Self.Tb_Ref" />
+    <AssociationSet Name="FK_Tb_Ref_Tb_Applicants" Association="Self.FK_Tb_Ref_Tb_Applicants">
+      <End Role="Tb_Applicants" EntitySet="Tb_Applicants" />
+      <End Role="Tb_Ref" EntitySet="Tb_Ref" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

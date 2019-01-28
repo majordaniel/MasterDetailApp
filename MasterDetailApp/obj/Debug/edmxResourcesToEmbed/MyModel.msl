@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="JobApplicationDBModelStoreContainer" CdmEntityContainer="JobApplicationDBEntities">
+    <EntitySetMapping Name="Tb_Applicants">
+      <EntityTypeMapping TypeName="JobApplicationDBModel.Tb_Applicants">
+        <MappingFragment StoreEntitySet="Tb_Applicants">
+          <ScalarProperty Name="App_Id" ColumnName="App_Id" />
+          <ScalarProperty Name="App_Postion" ColumnName="App_Postion" />
+          <ScalarProperty Name="App_First_Name" ColumnName="App_First_Name" />
+          <ScalarProperty Name="App_Last_Name" ColumnName="App_Last_Name" />
+          <ScalarProperty Name="App_Email" ColumnName="App_Email" />
+          <ScalarProperty Name="App_Phone" ColumnName="App_Phone" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tb_Ref">
+      <EntityTypeMapping TypeName="JobApplicationDBModel.Tb_Ref">
+        <MappingFragment StoreEntitySet="Tb_Ref">
+          <ScalarProperty Name="RefId" ColumnName="RefId" />
+          <ScalarProperty Name="App_Id" ColumnName="App_Id" />
+          <ScalarProperty Name="Ref_Name" ColumnName="Ref_Name" />
+          <ScalarProperty Name="Ref_Phone" ColumnName="Ref_Phone" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

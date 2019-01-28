@@ -1,0 +1,217 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>WELCOME TO SIMPLEX JOB APPLICATION PORTAL</h2>
+
+<div class="row">
+    <div class="row">
+        <div class="col-sm-6">
+            <span>Position</span><select id="SelPosition" class="form-control">
+                <option id="SelPosition"  value="Admin">Admin</option>
+                <option id="SelPosition"  value="HR">HR</option>
+                <option id="SelPosition"  value="Accountant">Accountant</option>
+            </select>
+            <span>FirstName:</span><input type="text" name="" class="form-control" id="txtFirstName" value="" placeholder="Enter First Name" />
+            <span>LastName:</span><input type="text" name="" class="form-control" id="txtLastName" value="" placeholder="Enter Last Name" />
+        </div>
+
+        <div class="col-sm-6">
+            <span>PhoneNo:</span><input type="text" name="" class="form-control" id="txtPhoneNo" value="" placeholder="Enter Phone No" />
+            <span>Email:</span><input type="text" name="" class="form-control" id="txtEmail" value="" placeholder="Enter Email" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+           <h3><span>References</span></h3>
+        </div>
+        @*<div class="col-sm-6">
+            <input type="button" id="btnAddRef" class="form-control btn btn-info" onclick="OpenRefModal();" value="Add Reference" />
+        </div>*@
+    </div>
+</div>
+
+
+<div class="row">
+    <table class="table table-bordered">
+        <tr>
+            <td>Name:</td>
+            <td>Phone Number:</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" class="form-control" id="txtRefName" value="" placeholder="Enter Ref Email" />
+                <span>Ref Email required</span>
+            </td>
+            <td>
+                <input type="text" class="form-control" id="txtRefPhone" value="" placeholder="Enter Ref Phone" />
+                <span>Ref Phone required</span>
+            </td>
+            <td>
+                <input type="button" id="btnAddRef" class="form-control btn btn-info" value="Add Reference" />
+
+            </td>
+         </tr>
+    </table>
+</div>
+<div class="row">
+    <div id="RefDetailsList">
+
+    </div>
+    <div class="row">
+        <input type="button" id="btnSaveAll" class="form-control btn btn-info" value="SAVE ALL" />
+       
+    </div>
+</div>
+
+<link href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+@section Scripts{
+    @*<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>*@
+    <script>
+        $(document).ready(function () {
+            var RefDetailsList = [];
+
+            //add button click function
+            $('#btnAddRef').click(function () {
+                //click validation of form items
+                var isValid = true;
+                if ($('#txtRefName').val().trim() == '') {
+                    isValid = false;
+                    $('#txtRefName').siblings('span.error').css('visibility', 'visible');
+                }
+                else {
+                    $('#txtRefName').siblings('span.error').css('visibility', 'hidden');
+                }
+
+                //--------refphone input box------
+                if ($('#txtRefPhone').val().trim() == '') {
+                    isValid = false;
+                    $('#txtRefPhone').siblings('span.error').css('visibility', 'visible');
+                }
+                else {
+                    $('#txtRefPhone').siblings('span.error').css('visibility', 'hidden');
+                }
+                // Add reference to list if valid
+
+                if (isValid) {
+                    RefDetailsList.push({
+                        Ref_Name: $('#txtRefName').val().trim(),
+                        Ref_Phone: $('#txtRefPhone').val().trim()
+                    });
+
+                    $('#txtRefName').focus();
+                    $('#txtRefPhone').val('');
+                    $('#txtRefName').val('');
+                }
+                GeneratedRefTable();
+            });
+
+
+            //save button click function
+
+            $('#btnSaveAll').click(function () {
+                //Validate Applicant
+                var isAllValid = true;
+              
+
+                if (RefDetailsList.length == 0) {
+                    $('#RefDetailsList').html('<span style="color:red;">Please Add Applicant</span>');
+                    isAllValid = false;
+                }
+
+                //if ($('#txtFirstName').val().trim()=='') {
+                //    isAllValid = false
+                //    $('#txtFirstName').siblings('span.error').css('visibility', 'visible');
+                //}
+                //else {
+                //    $('#txtFirstName').siblings('span.error').css('visibility', 'hidden');
+                //}
+
+
+                //if ($('#txtLastName').val().trim() == '') {
+                //    isAllValid = false
+                //    $('#txtLastName').siblings('span.error').css('visibility', 'visible');
+                //}
+                //else {
+                //    $('#txtLastName').siblings('span.error').css('visibility', 'hidden');
+                //}
+
+                //Save if Valid
+                if (isAllValid) {
+                    var data = {
+                  
+               App_Postion : $('#selPosition').val(),
+               App_First_Name : $('#txtFirstName').val(), 
+               App_Last_Name : $('#txtLastName').val(),
+               App_Email : $('#txtEmail').val(),
+               App_Phone : $('#txtPhoneNo').val(),
+               ReferenceDetails: RefDetailsList
+                    }
+
+                    $(this).val('Please Wait...');
+                    $.ajax({
+                        url: '/Home/SaveApplicant',
+                        type: 'POST',
+                        data: JSON.stringify(data),
+                        dataType: "JSON",
+                        contentType: "application/json",
+                        success: function(d) {
+                            //check is Successfully saved to database
+                            if (d.status == true) {
+                                alert('The Applicant is successfully saved');
+                                //clear form
+                                RefDet = [];
+                                $('#txtFirstName').val('');
+                                $('#txtLastName').val('');
+                                $('#txtEmail').val('');
+                                $('#txtPhoneNo').val('');
+                                $('#RefDetailsList').empty();
+                            }
+                            else {
+                                alert("Failed to Save Applicant Details")
+                            }
+                            $('#btnSaveAll').val('Save');
+                        },
+                        error: function() {
+                            alert('Error, Please try Again...');
+                            $('#btnSaveAll').val('Save');
+                        }
+                    });
+                }
+            })
+
+            //function for show added items in the table
+            function GeneratedRefTable() {
+                if (RefDetailsList.length > 0) {
+                    var $RefTable = $('<table class="table table-boardered"/>');
+                    $RefTable.append(' <thead><tr><th>Reference Name</th><th>Reference Phone No</th></tr></thead>');
+                    var $RefTableBody = $('<tbody/>');
+
+                    $.each(RefDetailsList, function (i, val) {
+                        var $row = $('<tr/>');
+                        $row.append($('<td/>').html(val.Ref_Name));
+                        $row.append($('<td/>').html(val.Ref_Phone));
+
+                        $RefTableBody.append($row);
+                    });
+
+                    $RefTable.append($RefTableBody);
+                    $('#RefDetailsList').html($RefTable);
+                }
+            }
+        });
+    </script>
+    }
+
+
+<style>
+    span.error{
+        display:block;
+        visibility:hidden;
+        color:red;
+        font-size:70%;
+    }
+</style>
+

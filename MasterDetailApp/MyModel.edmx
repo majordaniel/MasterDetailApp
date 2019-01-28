@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="JobApplicationDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Tb_Applicants">
+          <Key>
+            <PropertyRef Name="App_Id" />
+          </Key>
+          <Property Name="App_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="App_Postion" Type="varchar" MaxLength="50" />
+          <Property Name="App_First_Name" Type="varchar" MaxLength="50" />
+          <Property Name="App_Last_Name" Type="varchar" MaxLength="50" />
+          <Property Name="App_Email" Type="varchar" MaxLength="50" />
+          <Property Name="App_Phone" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Tb_Ref">
+          <Key>
+            <PropertyRef Name="RefId" />
+          </Key>
+          <Property Name="RefId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="App_Id" Type="int" />
+          <Property Name="Ref_Name" Type="varchar" MaxLength="50" />
+          <Property Name="Ref_Phone" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_Tb_Ref_Tb_Applicants">
+          <End Role="Tb_Applicants" Type="Self.Tb_Applicants" Multiplicity="0..1" />
+          <End Role="Tb_Ref" Type="Self.Tb_Ref" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tb_Applicants">
+              <PropertyRef Name="App_Id" />
+            </Principal>
+            <Dependent Role="Tb_Ref">
+              <PropertyRef Name="App_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="JobApplicationDBModelStoreContainer">
+          <EntitySet Name="Tb_Applicants" EntityType="Self.Tb_Applicants" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tb_Ref" EntityType="Self.Tb_Ref" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Tb_Ref_Tb_Applicants" Association="Self.FK_Tb_Ref_Tb_Applicants">
+            <End Role="Tb_Applicants" EntitySet="Tb_Applicants" />
+            <End Role="Tb_Ref" EntitySet="Tb_Ref" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="JobApplicationDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Tb_Applicants">
+          <Key>
+            <PropertyRef Name="App_Id" />
+          </Key>
+          <Property Name="App_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="App_Postion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="App_First_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="App_Last_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="App_Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="App_Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Tb_Ref" Relationship="Self.FK_Tb_Ref_Tb_Applicants" FromRole="Tb_Applicants" ToRole="Tb_Ref" />
+        </EntityType>
+        <EntityType Name="Tb_Ref">
+          <Key>
+            <PropertyRef Name="RefId" />
+          </Key>
+          <Property Name="RefId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="App_Id" Type="Int32" />
+          <Property Name="Ref_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Ref_Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Tb_Applicants" Relationship="Self.FK_Tb_Ref_Tb_Applicants" FromRole="Tb_Ref" ToRole="Tb_Applicants" />
+        </EntityType>
+        <Association Name="FK_Tb_Ref_Tb_Applicants">
+          <End Role="Tb_Applicants" Type="Self.Tb_Applicants" Multiplicity="0..1" />
+          <End Role="Tb_Ref" Type="Self.Tb_Ref" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tb_Applicants">
+              <PropertyRef Name="App_Id" />
+            </Principal>
+            <Dependent Role="Tb_Ref">
+              <PropertyRef Name="App_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="JobApplicationDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Tb_Applicants" EntityType="Self.Tb_Applicants" />
+          <EntitySet Name="Tb_Ref" EntityType="Self.Tb_Ref" />
+          <AssociationSet Name="FK_Tb_Ref_Tb_Applicants" Association="Self.FK_Tb_Ref_Tb_Applicants">
+            <End Role="Tb_Applicants" EntitySet="Tb_Applicants" />
+            <End Role="Tb_Ref" EntitySet="Tb_Ref" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="JobApplicationDBModelStoreContainer" CdmEntityContainer="JobApplicationDBEntities">
+          <EntitySetMapping Name="Tb_Applicants">
+            <EntityTypeMapping TypeName="JobApplicationDBModel.Tb_Applicants">
+              <MappingFragment StoreEntitySet="Tb_Applicants">
+                <ScalarProperty Name="App_Id" ColumnName="App_Id" />
+                <ScalarProperty Name="App_Postion" ColumnName="App_Postion" />
+                <ScalarProperty Name="App_First_Name" ColumnName="App_First_Name" />
+                <ScalarProperty Name="App_Last_Name" ColumnName="App_Last_Name" />
+                <ScalarProperty Name="App_Email" ColumnName="App_Email" />
+                <ScalarProperty Name="App_Phone" ColumnName="App_Phone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tb_Ref">
+            <EntityTypeMapping TypeName="JobApplicationDBModel.Tb_Ref">
+              <MappingFragment StoreEntitySet="Tb_Ref">
+                <ScalarProperty Name="RefId" ColumnName="RefId" />
+                <ScalarProperty Name="App_Id" ColumnName="App_Id" />
+                <ScalarProperty Name="Ref_Name" ColumnName="Ref_Name" />
+                <ScalarProperty Name="Ref_Phone" ColumnName="Ref_Phone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
